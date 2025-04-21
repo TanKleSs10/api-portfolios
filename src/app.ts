@@ -13,7 +13,7 @@ function main() {
   const logger = new WinstonLogger();
   const db = new DbConfig({
     MONGODB_URI: envs.MONGODB_URI,
-    logger: logger
+    logger
   });
   
   db.dbConnection();
@@ -21,6 +21,7 @@ function main() {
   const server = new Server({
     port: envs.PORT,
     routes: AppRoutes.router,
+    logger
   });
 
   server.start();
