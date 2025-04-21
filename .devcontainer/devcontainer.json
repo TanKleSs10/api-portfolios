@@ -34,7 +34,8 @@
 				"esbenp.prettier-vscode",
 				"yoavbls.pretty-ts-errors",
 				"WallabyJs.console-ninja",
-				"rangav.vscode-thunder-client"
+				"rangav.vscode-thunder-client",
+				"mongodb.mongodb-vscode"
 			]
 		}
 	}

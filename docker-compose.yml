@@ -7,8 +7,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DB_USER=quantum
-      - DB_PASSWORD=quantum
+      - MONGODB_URI=mongodb://quantum:quantum@quantum-db:27017/
       - PORT=3000
       - ENV=dev
     restart: always
