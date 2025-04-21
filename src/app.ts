@@ -1,4 +1,6 @@
-import { envs } from "./envs";
+import { DbConfig } from "./config/dbConfig";
+import { envs } from "./config/envs";
+import { WinstonLogger } from "./infrastructure/logger/winstonLogger.adapter";
 import { AppRoutes } from "./presentation/routes";
 import { Server } from "./presentation/server";
 
@@ -7,6 +9,14 @@ import { Server } from "./presentation/server";
 })();
 
 function main() {
+
+  const logger = new WinstonLogger();
+  const db = new DbConfig({
+    MONGODB_URI: envs.MONGODB_URI,
+    logger: logger
+  });
+  
+  db.dbConnection();
 
   const server = new Server({
     port: envs.PORT,
