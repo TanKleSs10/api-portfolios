@@ -9,7 +9,6 @@ enum Role {
     schemaOptions: {
         timestamps: true,
         collection: "users",
-        versionKey: false, // Evita que se agregue "__v"
     },
 })
 class UserModel {
