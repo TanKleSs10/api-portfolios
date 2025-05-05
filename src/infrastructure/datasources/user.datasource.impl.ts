@@ -6,10 +6,10 @@ import { UserEntity } from "../../domain/entities/user.entity";
 import { userModel } from "../models/user/userModel";
 import { BcryptAdapter } from "../adapters/bcript.adapter";
 
-const bcriptAdapter = new BcryptAdapter();
-
 export class UserDataSourceImpl implements UserDataSource {
-    
+      
+    constructor(private readonly bcryptAdapter = new BcryptAdapter()) {}
+
     async findUserByEmail(email: string): Promise<UserEntity> {
         const user = await userModel.findOne({ email });
         if (!user) {
@@ -18,7 +18,7 @@ export class UserDataSourceImpl implements UserDataSource {
         return UserEntity.fromObject(user);
     }
     async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-        createUserDto.password = await bcriptAdapter.hash(createUserDto.password);
+        createUserDto.password = await this.bcryptAdapter.hash(createUserDto.password);
         const user = await userModel.create(createUserDto); // 👈 No necesitas { $set }
         return UserEntity.fromObject(user.toObject());
       }

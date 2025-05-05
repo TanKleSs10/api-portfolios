@@ -10,9 +10,7 @@ import { DeleteUserUseCase } from "../../domain/usecases/user/deleteUser.usecase
 
 export class UserController {
     
-    constructor(
-        private readonly userRepository: UserRepository
-    ){}
+    constructor(private readonly userRepository: UserRepository) {}
     
     public getUsers = (_req:Request, res: Response) => {
         new FindAllUsersUseCase(this.userRepository).execute().then(users => {
@@ -31,26 +29,40 @@ export class UserController {
         });
     }
 
-    public createUser = (req:Request, res: Response) => {
-        const [error, createUserDto] = CreateUserDto.create(req.body);
-        if(error)  res.status(400).json(error);
-        new CreateUserUseCase(this.userRepository).execute(createUserDto!).then(user => {
-            res.status(201).json(user);
-        }).catch(error => {
-            res.status(400).json(error);
+    public getUserByEmail = (req:Request, res: Response) => {
+        const { email } = req.params;
+        new FindUserByIdUseCase(this.userRepository).execute(email).then(user => { 
+            res.status(200).json(user);
+        }).catch(err => {
+            res.status(400).json(err);
         });
     }
 
+    public createUser = (req:Request, res: Response) => {
+        const [error, createUserDto] = CreateUserDto.create(req.body);
+        if(error){
+            res.status(400).json(error)
+        }else{
+            new CreateUserUseCase(this.userRepository).execute(createUserDto!).then(user => {
+                res.status(201).json(user);
+            }).catch(error => {
+                res.status(400).json(error);
+            });
+        }
+    }
+    
     public updateUser = (req:Request, res: Response) => {
         const { id } = req.params;
         const [error, updateUserDto] = UpdateUserDto.create({...req.body, id});
-        if(error)  res.status(400).json(error);
-
-        new UpdateUserUseCase (this.userRepository).execute(updateUserDto!).then(user => {
-             res.status(200).json(user);
-        }).catch(error => {
-             res.status(400).json(error);
-        });
+        if(error) {
+            res.status(400).json(error)
+        }else{
+            new UpdateUserUseCase(this.userRepository).execute(updateUserDto!).then(user => {
+                res.status(200).json(user);
+            }).catch(error => {
+                res.status(400).json(error);
+            });
+        }
     }
 
     public deleteUser = (req:Request, res: Response) => {

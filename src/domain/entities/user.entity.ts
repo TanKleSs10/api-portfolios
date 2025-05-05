@@ -10,14 +10,14 @@ export class UserEntity {
     ){}
 
     public static fromObject(obj: any): UserEntity {
-        const { id, name, email, password, rol, createdAt, updatedAt } = obj;
+        const { _id, id, name, email, password, rol, createdAt, updatedAt } = obj;
 
         if (!name || !email || !password) {
             throw new Error("Invalid user object.");
         }
 
         return new UserEntity(
-            id,
+            (_id || id)?.toString(),
             name,
             email,
             password,

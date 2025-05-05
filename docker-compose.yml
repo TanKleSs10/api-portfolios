@@ -7,9 +7,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGODB_URI=mongodb://quantum:quantum@quantum-db:27017/
-      - PORT=3000
-      - ENV=dev
+      - MONGODB_URI=${MONGODB_URI}
+      - PORT=${PORT}
+      - ENV=${ENV}
     restart: always
     volumes:
       - .:/app
@@ -23,8 +23,8 @@ services:
     ports:
       - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=quantum
-      - MONGO_INITDB_ROOT_PASSWORD=quantum
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
     restart: always
     volumes:
       - quantum-db-data:/data/db
