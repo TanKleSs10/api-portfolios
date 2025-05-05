@@ -1,4 +1,3 @@
-import { DbConfig } from "../../../../config/dbConfig";
 import { envs } from "../../../../config/envs";
 import { userModel } from "../../../../infrastructure/models/user/userModel";
 import mongoose from "mongoose";
