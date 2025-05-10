@@ -2,7 +2,7 @@ import { TagEntity } from "../../entities/tag.entity";
 import { TagRepository } from "../../repositories/tag.repository";
 
 export interface IFindTagByNameUseCase {
-    execute(email: string): Promise<TagEntity>;
+    execute(name: string): Promise<TagEntity>;
 } 
 
 export class FindTagByNameUseCase implements IFindTagByNameUseCase {

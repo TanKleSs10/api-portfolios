@@ -6,7 +6,7 @@ import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
         collection: "tags",
     },
 })
-class TagModel {
+export class TagModel {
     @prop({
         required: true,
         trim: true,

@@ -3,7 +3,7 @@ import { TagEntity } from "../../entities/tag.entity";
 import { TagRepository } from "../../repositories/tag.repository";
 
 export interface ICreateTagUseCase {
-    execute(createUserDto: CreateTagDto): Promise<TagEntity>;
+    execute(createTagDto: CreateTagDto): Promise<TagEntity>;
 } 
 
 export class CreateTagUseCase implements ICreateTagUseCase {

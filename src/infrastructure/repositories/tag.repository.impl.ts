@@ -11,12 +11,6 @@ export class TagRepositoryImpl implements TagRepository {
     ){}
 
     createTag(createTagDto: CreateTagDto): Promise<TagEntity> {
-        const { name } = createTagDto;
-        
-        this.tagDataSource.findTagByName(name).then(tag => {
-            if(tag) throw new Error("Tag already exists.");
-        });
-        
         return this.tagDataSource.createTag(createTagDto);
     }
     findTagById(id: string): Promise<TagEntity> {
