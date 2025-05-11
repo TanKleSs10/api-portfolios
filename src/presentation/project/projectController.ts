@@ -18,20 +18,20 @@ export class ProjectController {
         const [error, createProjectDto] = CreateProjectDto.create(req.body);
         if(error){
             res.status(400).json({
-                succes: false,
+                success: false,
                 message: "Error al crear proyecto",
                 data: error
             });
         }else{
             new CreateProjectUseCase(this.projectRepository).execute(createProjectDto!).then(project => {
                 res.status(201).json({
-                    succes: true,
+                    success: true,
                     message: "Proyecto creado correctamente",
                     data: project
                 });
             }).catch((error) => {
                 res.status(500).json({
-                    succes: false,
+                    success: false,
                     message: "Error al crear proyecto",
                     data: error
                 });
@@ -63,7 +63,7 @@ export class ProjectController {
         new FindAllProjectUseCase(this.projectRepository).execute(filters)
             .then(({ projects, totalItems }) => {
                 res.status(200).json({
-                    success: true,
+                    successs: true,
                     message: "Proyectos obtenidos correctamente",
                     data: projects,
                     pagination: {
@@ -77,7 +77,7 @@ export class ProjectController {
             .catch((error) => {
                 console.error("Error al obtener proyectos:", error);
                 res.status(500).json({
-                    success: false,
+                    successs: false,
                     message: "Error interno al obtener proyectos",
                     error: error.message || error
                 });
@@ -104,13 +104,13 @@ export class ProjectController {
         }else{
             new UpdateProjectUseCase(this.projectRepository).execute(updateProjectDto!).then(project => {
                 res.status(200).json({
-                    succes: true,
+                    success: true,
                     message: "Proyecto actualizado correctamente",
                     data: project
                 });
             }).catch((error) => {
                 res.status(400).json({
-                    succes: false,
+                    success: false,
                     message: "Error al actualizar proyecto",
                     data: error
                 });
@@ -122,13 +122,13 @@ export class ProjectController {
         const { id } = req.params;
         new DeleteProjectUseCase(this.projectRepository).execute(id).then(project => {
             res.status(200).json({
-                succes: true,
+                success: true,
                 message: "Proyecto eliminado correctamente",
                 data: project
             });
         }).catch((error) => {
             res.status(400).json({
-                succes: false,
+                success: false,
                 message: "Error al eliminar proyecto",
                 data: error
             });

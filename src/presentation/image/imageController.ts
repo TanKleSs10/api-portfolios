@@ -16,7 +16,7 @@ export class ImageController {
         // Validar que el tipo de entidad sea correcto
         if (!["projects", "posts"].includes(entityType)) {
             res.status(400).json({
-                succes: false,
+                success: false,
                 message: "Invalid entity type.",
                 data: undefined
             });
@@ -53,14 +53,14 @@ export class ImageController {
             const createdImages = await Promise.all(creationPromises);
             
             res.status(201).json({
-                succes: true,
+                success: true,
                 message: "Imagen creada correctamente",
                 data: createdImages
             });
 
          }catch (error) {
              res.status(400).json({
-                 succes: false,
+                 success: false,
                  message: "Error al crear imagen",
                  data: error
              });
@@ -71,14 +71,14 @@ export class ImageController {
         const { id, entityId } = req.params;
         new UpdateMainImageUseCase(this.imageRepository).execute(id, entityId).then(image => {
             res.status(200).json({
-                succes: true,
+                success: true,
                 message: "Imagen principal actualizada correctamente",
                 data: image
             });
         }).catch(error => {
             console.log("Error en setMainImage", error);
             res.status(400).json({
-                succes: false,
+                success: false,
                 message: "Error al actualizar imagen principal",
                 data: error
             });
@@ -90,20 +90,20 @@ export class ImageController {
         const [error, updateImageDto] = UpdateImageDto.create({id, ...req.body});
         if(error){
             res.status(400).json({
-                succes: false,
+                success: false,
                 message: "Error al actualizar imagen",
                 data: error
             });
         }else{
             new UpdateImageUseCase(this.imageRepository).execute(updateImageDto!).then(image => {
                 res.status(200).json({
-                    succes: true,
+                    success: true,
                     message: "Imagen actualizada correctamente",
                     data: image
                 });
             }).catch(error => {
                 res.status(400).json({
-                    succes: false,
+                    success: false,
                     message: "Error al actualizar imagen",
                     data: error
                 });
@@ -115,14 +115,14 @@ export class ImageController {
         const { id } = req.params;
         new DeleteImageUseCase(this.imageRepository).execute(id).then(image => {
             res.status(200).json({
-                succes: true,
+                success: true,
                 message: "Imagen eliminada correctamente",
                 data: image
             });
         }).catch(error => {
             console.log("Error en deleteImage", error);
             res.status(400).json({
-                succes: false,
+                success: false,
                 message: "Error al eliminar imagen",
                 data: error
             });
