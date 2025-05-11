@@ -33,7 +33,7 @@ export class Server {
         this.app.use(this.routes);
 
         // Start server
-        this.app.listen(this.port, () => {
+        this.server = this.app.listen(this.port, () => {
             this.logger.info(`Server running on http://localhost:${this.port}`);
         });
         

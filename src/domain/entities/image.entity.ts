@@ -1,7 +1,9 @@
 export class ImageEntity {
     constructor(
         public id: string,
-        public projectId: string,
+        public name: string,
+        public entityId: string,
+        public entityType: string,
         public url: string,
         public alt: string = "",
         public isMain: boolean = false,
@@ -14,22 +16,26 @@ export class ImageEntity {
         const {
             _id,
             id,
-            projectId,
+            name,
+            entityId,
             url,
             alt = "",
             isMain = false,
             createdAt,
             updatedAt,
             publicId = "",
+            entityType
         } = obj;
 
-        if (!projectId || !url) {
+        if (!entityId || !url) {
             throw new Error("Invalid image object: missing required fields.");
         }
 
         return new ImageEntity(
             (_id || id)?.toString(),
-            projectId,
+            name,
+            entityId,
+            entityType,
             url,
             alt,
             isMain,

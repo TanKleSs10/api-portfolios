@@ -1,6 +1,11 @@
 import { getModelForClass, modelOptions, prop, Ref } from "@typegoose/typegoose";
 import { ProjectModel } from "./ProjectModel";
 
+export enum EntityType {
+    Project = "ProjectModel",
+    Post = "PostModel"
+  }  
+
 @modelOptions({
     schemaOptions: {
         timestamps: true,
@@ -22,6 +27,7 @@ export class ImageModel {
     @prop({
         trim: true,
         minlength: 2,
+        lowercase: true,
     })
     alt!: string;
 
@@ -31,8 +37,11 @@ export class ImageModel {
     })
     url!: string;
 
-    @prop({ ref: () => ProjectModel })
-    projectId!: Ref<ProjectModel>;
+    @prop({required: true, enum: ["projectModel", "postModel"]})
+    entityType!: EntityType;
+
+    @prop({ refPath: "entityType"})
+    entityId!: Ref<ProjectModel> | string;
 
     @prop({ default: false })
     isMain?: boolean;

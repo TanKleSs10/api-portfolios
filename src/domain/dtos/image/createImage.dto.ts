@@ -1,27 +1,29 @@
 export class CreateImageDto {
     constructor(
-        public readonly projectId: string,
+        public readonly entityId: string,
         public readonly name: string,
         public readonly publicId: string,
         public readonly url: string,
         public readonly isMain?: boolean,
         public readonly alt?: string,
+        public readonly entityType?: string
     ) {}
 
     static create(props: { [key: string]: any }): [string | undefined, CreateImageDto | undefined] {
-        const { projectId, name, publicId, url, isMain, alt } = props;   
+        const { entityId, name, publicId, url, isMain, alt, entityType } = props;   
 
-        if (!projectId || !url) {
+        if (!entityId || !url) {
             return ["Invalid image object: missing required fields.", undefined];
         }
 
         return [undefined, new CreateImageDto(
-            projectId,
+            entityId,
             name,
             publicId,
             url,
             isMain ?? false,
-            alt
+            alt,
+            entityType
         )];
     }
 }

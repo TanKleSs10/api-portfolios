@@ -2,7 +2,7 @@ import { ImageEntity } from "../../entities/image.entity";
 import { ImageRepository } from "../../repositories/image.repository";
 
 export interface IUpdateMainImageUseCase {
-    execute(id: string, projectId: string): Promise<ImageEntity>;
+    execute(id: string, entityId: string): Promise<ImageEntity>;
 } 
 
 export class UpdateMainImageUseCase implements IUpdateMainImageUseCase {
@@ -10,7 +10,7 @@ export class UpdateMainImageUseCase implements IUpdateMainImageUseCase {
         private readonly imageRepository: ImageRepository
     ){}
 
-    execute(id: string, projectId: string): Promise<ImageEntity> {
-        return this.imageRepository.setMainImage(id, projectId);
+    execute(id: string, entityId: string): Promise<ImageEntity> {
+        return this.imageRepository.setMainImage(id, entityId);
     }
 } 

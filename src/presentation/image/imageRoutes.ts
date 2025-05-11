@@ -15,7 +15,7 @@ export class ImageRoutes {
      const imageRepository = new ImageRepositoryImpl(imageDataSource);
      const imageController = new ImageController(imageRepository);
 
-     router.post("/", upload.array("images", 4) ,imageController.createImage);
+     router.post("/", upload.array("images", 4), imageController.createImage);
      router.put("/:id", imageController.updateImage);
      router.patch("/:id/main", imageController.setMainImage);
      router.delete("/:id", imageController.deleteImage);

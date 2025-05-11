@@ -12,7 +12,7 @@ export class AppRoutes {
         router.use("/api/users", UserRoutes.routes);
         router.use("/api/tags", TagRoutes.routes);
         router.use("/api/projects", ProjectRoutes.routes);
-        router.use("/api/projects/:projectId/images", ImageRoutes.routes);
+        router.use("/api/:entityType/:entityId/images", ImageRoutes.routes);
 
         return router;
     }
