@@ -7,7 +7,10 @@ describe("envs", () => {
             {
                 MONGODB_URI: 'mongodb://quantumTest:quantumTest@quantum-db-test:27017',
                 PORT: 3000,
-                ENV: 'test'
+                ENV: 'test',
+                CLOUDINARY_CLOUD_NAME: "test_cloud",
+                CLOUDINARY_API_KEY: "test_key",
+                CLOUDINARY_API_SECRET: "test_secret"
               }
         )
     });

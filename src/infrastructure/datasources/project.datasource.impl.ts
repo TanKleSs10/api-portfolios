@@ -30,7 +30,7 @@ export class ProjectDataSourceImpl implements ProjectDataSource {
         const projects = await projectModel
         .find(query)
         .populate("tags", "name")
-        .populate("images", "name url alt")
+        .populate("images", "name url alt isMain")
         .skip((page - 1) * limit)
         .limit(limit);
 
