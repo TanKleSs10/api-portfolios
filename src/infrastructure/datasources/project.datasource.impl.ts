@@ -1,7 +1,9 @@
 import { ProjectDataSource } from "../../domain/datasources/project.datasource";
 import { CreateProjectDto } from "../../domain/dtos/project/createProject.dto";
 import { UpdateProjectDto } from "../../domain/dtos/project/updateProject.dto";
+import { ImageEntity } from "../../domain/entities/image.entity";
 import { ProjectEntity } from "../../domain/entities/project.entity";
+import { imageModel } from "../models/ImageModel";
 import { projectModel } from "../models/ProjectModel";
 
 export class ProjectDataSourceImpl implements ProjectDataSource {
@@ -59,5 +61,15 @@ export class ProjectDataSourceImpl implements ProjectDataSource {
             throw new Error("Project not found.");
         }
         return ProjectEntity.fromObject(project);
+    }
+
+    async getImagesFromProject(entityId: string): Promise<ImageEntity[]> {
+        const images = await imageModel.find({entityId, entityType: "projectModel"});
+        return images.map(image => ImageEntity.fromObject(image));
+    }
+
+    async deleteImageFromProject(entityId: string): Promise<boolean> {
+        const images = await imageModel.deleteMany({entityId, entityType: "projectModel"});
+        return images.acknowledged
     }
 }

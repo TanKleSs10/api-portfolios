@@ -4,9 +4,11 @@ import { UpdateProjectDto } from "../../domain/dtos/project/updateProject.dto";
 import { ProjectEntity } from "../../domain/entities/project.entity";
 import { ProjectRepository } from "../../domain/repositories/project.repository";
 import { Filters } from "../../domain/usecases/project/findAllProjects.usecase";
+import { CloudinaryAdapter } from "../adapters/cloudinary.adapter";
 
 export class ProjectRepositoryImpl implements ProjectRepository {
-    
+    private readonly uploads = CloudinaryAdapter;
+
     constructor( private readonly projectDataSource: ProjectDataSource) {}
     
     createProject(createProjectDto: CreateProjectDto): Promise<ProjectEntity> {
@@ -48,7 +50,13 @@ export class ProjectRepositoryImpl implements ProjectRepository {
         return this.projectDataSource.updateProject(updateProjectDto);
     }
 
-    deleteProject(id: string): Promise<ProjectEntity> {
+    async deleteProject(id: string): Promise<ProjectEntity> {
+        const images = await this.projectDataSource.getImagesFromProject(id);
+        images.forEach(image => this.uploads.deleteImage(image.publicId!));
+        const isDeleted = await this.projectDataSource.deleteImageFromProject(id);
+        if (!isDeleted) {
+            throw new Error("Error to delete images");
+        }
         return this.projectDataSource.deleteProject(id);
     }
 }

@@ -110,6 +110,7 @@ export class PostController {
                 data: post
             });
         }).catch(error => {
+            console.log(error)
             res.status(400).json({
                 success: false,
                 message: "Error al eliminar post",

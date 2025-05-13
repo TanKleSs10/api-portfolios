@@ -1,6 +1,7 @@
 import { PostDataSource } from "../../domain/datasources/post.datasource";
 import { CreatePostDto } from "../../domain/dtos/post/createPost.dto";
 import { UpdatePostDto } from "../../domain/dtos/post/updatePost.dto";
+import { ImageEntity } from "../../domain/entities/image.entity";
 import { PostEntity } from "../../domain/entities/post.entity";
 import { imageModel } from "../models/ImageModel";
 import { postModel } from "../models/PostModel";
@@ -18,7 +19,7 @@ export class PostDataSourceImpl implements PostDataSource {
     }
     
     async getPost(id: string): Promise<PostEntity> {
-        const post = await postModel.findById(id).populate("tags", "name").populate("images", "name alt url isMain publicId");
+        const post = await postModel.findById(id).populate("tags", "name").populate("images", "name alt url isMain");
         if (!post) {
             throw new Error("Post not found.");
         }
@@ -44,9 +45,13 @@ export class PostDataSourceImpl implements PostDataSource {
         return PostEntity.fromObject(post);
     }
 
-    async deleteImageFromPost(entityId: string): Promise<void> {
-        const images = await imageModel.deleteMany({entityId, entityType: "postModel"});
-        return;
+    async getImagesFromPost(entityId: string): Promise<ImageEntity[]> {
+        const images = await imageModel.find({entityId, entityType: "postModel"});
+        return images.map(image => ImageEntity.fromObject(image));
     }
 
+    async deleteImageFromPost(entityId: string): Promise<boolean> {
+        const images = await imageModel.deleteMany({entityId, entityType: "postModel"});
+        return images.acknowledged
+    }
 }

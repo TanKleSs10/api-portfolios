@@ -3,8 +3,11 @@ import { CreatePostDto } from "../../domain/dtos/post/createPost.dto";
 import { UpdatePostDto } from "../../domain/dtos/post/updatePost.dto";
 import { PostEntity } from "../../domain/entities/post.entity";
 import { PostRepository } from "../../domain/repositories/post.repository";
+import { CloudinaryAdapter } from "../adapters/cloudinary.adapter";
 
 export class PostRepositoryImpl implements PostRepository {
+    private uploads = CloudinaryAdapter;
+
     constructor( private readonly postDataSource: PostDataSource ) {}
     
     createPost(createPostDto: CreatePostDto): Promise<PostEntity> {
@@ -23,7 +26,13 @@ export class PostRepositoryImpl implements PostRepository {
         return this.postDataSource.updatePost(updatePostDto);
     }
 
-    deletePost(id: string): Promise<PostEntity> {
+    async deletePost(id: string): Promise<PostEntity> {
+        const images = await this.postDataSource.getImagesFromPost(id);
+        images.forEach(image => this.uploads.deleteImage(image.publicId!));
+        const  isDeleted = await this.postDataSource.deleteImageFromPost(id);
+        if(!isDeleted){
+            throw new Error("Error to delete images");
+        }
         return this.postDataSource.deletePost(id);
     }
 }

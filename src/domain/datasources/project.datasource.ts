@@ -1,5 +1,6 @@
 import { CreateProjectDto } from "../dtos/project/createProject.dto";
 import { UpdateProjectDto } from "../dtos/project/updateProject.dto";
+import { ImageEntity } from "../entities/image.entity";
 import { ProjectEntity } from "../entities/project.entity";
 
 export abstract class ProjectDataSource {
@@ -10,4 +11,6 @@ export abstract class ProjectDataSource {
     abstract countProjects(query: any): Promise<number>
     abstract updateProject(updateProjectDto: UpdateProjectDto): Promise<ProjectEntity>;
     abstract deleteProject(id: string): Promise<ProjectEntity>;
+    abstract getImagesFromProject(entityId: string): Promise<ImageEntity[]>;
+    abstract deleteImageFromProject(entityId: string): Promise<boolean>;
 }
