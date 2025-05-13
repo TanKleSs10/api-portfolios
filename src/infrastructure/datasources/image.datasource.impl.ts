@@ -3,12 +3,14 @@ import { CreateImageDto } from "../../domain/dtos/image/createImage.dto";
 import { UpdateImageDto } from "../../domain/dtos/image/updateImage.dto";
 import { ImageEntity } from "../../domain/entities/image.entity";
 import { imageModel } from "../models/ImageModel";
+import { postModel } from "../models/PostModel";
 import { projectModel } from "../models/ProjectModel";
 
 export class ImageDataSourceImpl implements ImageDataSource {
     
     async createImage(createImageDto: CreateImageDto): Promise<ImageEntity> {
         const newImage = await imageModel.create(createImageDto);
+        console.log(newImage);
         return ImageEntity.fromObject(newImage);
     }
 
@@ -26,10 +28,10 @@ export class ImageDataSourceImpl implements ImageDataSource {
             const project = await projectModel.findById(entityId);
             return !!project; // true si existe, false si no
           }
-          // case "postModel": {
-          //   const post = await postModel.findById(entityId);
-          //   return !!post;
-          // }
+          case "postModel": {
+            const post = await postModel.findById(entityId);
+            return !!post;
+          }
           default:
             return false;
         }
@@ -48,15 +50,15 @@ export class ImageDataSourceImpl implements ImageDataSource {
                 );
                 console.log("project", project);
                 break;
-            // case "postModel":
-            //     await postModel.findByIdAndUpdate(
-            //         entityId,
-            //         {
-            //             $push: { images: imageId },  // Agregar la imagen al arreglo de imágenes
-            //         },
-            //         { new: true, runValidators: true } // Opcional: si necesitas que te devuelva el proyecto actualizado
-            //     );
-            //     break;
+            case "postModel":
+                await postModel.findByIdAndUpdate(
+                    entityId,
+                    {
+                        $push: { images: imageId },  // Agregar la imagen al arreglo de imágenes
+                    },
+                    { new: true, runValidators: true } // Opcional: si necesitas que te devuelva el proyecto actualizado
+                );
+                break;
             default:
         }
 
@@ -73,15 +75,15 @@ export class ImageDataSourceImpl implements ImageDataSource {
                     { new: true, runValidators: true }
                 );
                 break;
-            // case "postModel":
-            //     await postModel.findByIdAndUpdate(
-            //         entityId,
-            //         {
-            //             $pull: { images: imageId }
-            //         },
-            //         { new: true, runValidators: true }
-            //     );
-            //     break;
+            case "postModel":
+                await postModel.findByIdAndUpdate(
+                    entityId,
+                    {
+                        $pull: { images: imageId }
+                    },
+                    { new: true, runValidators: true }
+                );
+                break;
             default:
         }
     }
