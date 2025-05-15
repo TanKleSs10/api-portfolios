@@ -1,16 +1,11 @@
 import { Router } from "express";
-import { ProjectDataSourceImpl } from "../../infrastructure/datasources/project.datasource.impl";
-import { ProjectRepositoryImpl } from "../../infrastructure/repositories/project.repository.impl";
-import { ProjectController } from "./projectController";
+import { container } from "../../config/di.container";
 
 export class ProjectRoutes {
  
     static get routes() {
         const router = Router();
-
-        const projectDatasource = new ProjectDataSourceImpl();
-        const projectRepository = new ProjectRepositoryImpl(projectDatasource);
-        const projectController = new ProjectController(projectRepository);
+        const projectController = container.projectController;
 
         router.post("/", projectController.createProject);
         router.get("/", projectController.getAllProjects);
