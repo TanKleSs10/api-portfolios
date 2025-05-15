@@ -15,20 +15,21 @@ class UserModel {
     @prop({
         required: true,
         trim: true,
-        minlength: 2,
-        maxlength: 50,
-        set: (val: string) => val.toLowerCase(), // Convertir a minúsculas antes de guardar
+        lowercase: true
     })
     name!: string;
 
     @prop({
         required: true,
         unique: true,
-        lowercase: true, // Ya está en minúsculas
+        lowercase: true,
         trim: true,
         match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, // Regex de email
     })
     email!: string;
+
+    @prop({default: false})
+    emailValidated!: boolean;
 
     @prop({
         required: true,

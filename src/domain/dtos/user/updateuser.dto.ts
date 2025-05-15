@@ -1,3 +1,5 @@
+import { regularExps } from "../../../config/regular-exp";
+
 export class UpdateUserDto {
     constructor(
         public readonly id: string,
@@ -20,11 +22,19 @@ export class UpdateUserDto {
         const { id, name, email, password, rol } = props;
 
         if (!id) {
-            return ["Invalid user id.", undefined];
+            return ["Missing id.", undefined];
         }
 
         if (!name && !email && !password && !rol) {
-            return ["No updates provided.", undefined];
+            return ["No updates provided, missing name, email, password or rol.", undefined];
+        }
+
+        if( !regularExps.email.test(email) ) {
+            return ["Invalid email.", undefined];
+        }
+        
+        if(password.length < 8) {
+            return ["Pasword too short.", undefined];
         }
 
         return [undefined, new UpdateUserDto(id, name, email, password, rol)];

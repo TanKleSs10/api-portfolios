@@ -7,70 +7,123 @@ import { CreateUserUseCase } from "../../domain/usecases/user/createUser.usecase
 import { UpdateUserDto } from "../../domain/dtos/user/updateuser.dto";
 import { UpdateUserUseCase } from "../../domain/usecases/user/updateUser.usecase";
 import { DeleteUserUseCase } from "../../domain/usecases/user/deleteUser.usecase";
+import { LoginUserDto } from "../../domain/dtos/auth/loginUser.dto";
 
 export class UserController {
-    
     constructor(private readonly userRepository: UserRepository) {}
     
-    public getUsers = (_req:Request, res: Response) => {
+    createUser = (req:Request, res: Response) => {
+        const [error, createUserDto] = CreateUserDto.create(req.body);
+        if(error){
+            res.status(400).json({
+                success: false,
+                message: "Error al crear usuario",
+                data: error
+            })
+        }else{
+            new CreateUserUseCase(this.userRepository).execute(createUserDto!).then(user => {
+                res.status(201).json({
+                    success: true,
+                    message: "Usuario creado correctamente",
+                    data: user
+                });
+            }).catch(error => {
+                console.log(error);
+                res.status(400).json({
+                    success: false,
+                    message: "Error al crear usuario",
+                    data: error
+                });
+            });
+        }
+    }
+
+    getUsers = (_req:Request, res: Response) => {
         new FindAllUsersUseCase(this.userRepository).execute().then(users => {
-             res.status(200).json(users);
-        }).catch(err => {
-             res.status(400).json(err);
+             res.status(200).json({
+                 success: true,
+                 message: "Usuarios obtenidos correctamente",
+                 data: users
+             });
+        }).catch(error => {
+             res.status(400).json({
+                 success: false,
+                 message: "Error al obtener usuarios",
+                 data: error
+             });
         });
     }
 
-    public getUserById = (req:Request, res: Response) => {
+    getUserById = (req:Request, res: Response) => {
         const { id } = req.params;
         new FindUserByIdUseCase(this.userRepository).execute(id).then(user => { 
-             res.status(200).json(user);
-        }).catch(err => {
-             res.status(400).json(err);
+             res.status(200).json({
+                 success: true,
+                 message: "Usuario obtenido correctamente",
+                 data: user
+             });
+        }).catch(error => {
+             res.status(400).json({
+                 success: false,
+                 message: "Error al obtener usuario",
+                 data: error
+             });
         });
     }
 
-    public getUserByEmail = (req:Request, res: Response) => {
+    getUserByEmail = (req:Request, res: Response) => {
         const { email } = req.params;
         new FindUserByIdUseCase(this.userRepository).execute(email).then(user => { 
-            res.status(200).json(user);
+            res.status(200).json({
+                success: true,
+                message: "Usuario obtenido correctamente",
+                data: user
+            });
         }).catch(err => {
             res.status(400).json(err);
         });
     }
 
-    public createUser = (req:Request, res: Response) => {
-        const [error, createUserDto] = CreateUserDto.create(req.body);
-        if(error){
-            res.status(400).json(error)
-        }else{
-            new CreateUserUseCase(this.userRepository).execute(createUserDto!).then(user => {
-                res.status(201).json(user);
-            }).catch(error => {
-                res.status(400).json(error);
-            });
-        }
-    }
-    
-    public updateUser = (req:Request, res: Response) => {
+    updateUser = (req:Request, res: Response) => {
         const { id } = req.params;
         const [error, updateUserDto] = UpdateUserDto.create({...req.body, id});
         if(error) {
-            res.status(400).json(error)
+            res.status(400).json({
+                success: false,
+                message: "Error al actualizar usuario",
+                data: error
+            })
         }else{
             new UpdateUserUseCase(this.userRepository).execute(updateUserDto!).then(user => {
-                res.status(200).json(user);
+                res.status(200).json({
+                    success: true,
+                    message: "Usuario actualizado correctamente",
+                    data: user
+                });
             }).catch(error => {
-                res.status(400).json(error);
+                res.status(400).json({
+                    success: false,
+                    message: "Error al actualizar usuario",
+                    data: error
+                });
             });
         }
     }
 
-    public deleteUser = (req:Request, res: Response) => {
+    deleteUser = (req:Request, res: Response) => {
         const { id } = req.params;
         new DeleteUserUseCase(this.userRepository).execute(id).then(user => {
-             res.status(200).json(user);
+             res.status(200).json({
+                 success: true,
+                 message: "Usuario eliminado correctamente",
+                 data: user
+             });
         }).catch(error => {
-             res.status(400).json(error);
+             res.status(400).json({
+                 success: false,
+                 message: "Error al eliminar usuario",
+                 data: error
+             });
         });
     }
 }
