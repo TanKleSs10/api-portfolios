@@ -5,7 +5,7 @@ export class UserEntity {
         public email: string,
         public emailValidated: boolean,
         public password: string,
-        public rol: string = 'editor', // Valor por defecto 'editor'
+        public rol: "admin" | "editor" = "editor",
         public createdAt?: Date,
         public updatedAt?: Date
     ){}
