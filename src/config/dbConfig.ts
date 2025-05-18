@@ -24,4 +24,14 @@ export class DbConfig {
       throw new Error("MongoDB connection failed.");
     }
   }
+
+  async dbDisconnect(): Promise<void> {
+    try {
+      await mongoose.disconnect();
+      this.logger.info("MongoDB disconnected successfully.");
+    } catch (error) {
+      this.logger.error("Error disconnecting from MongoDB:" + error);
+      throw new Error("MongoDB disconnection failed.");
+    }
+  }
 }

@@ -1,24 +1,19 @@
+import { QueryParamsDto } from "../../dtos/project/queryParams.dto";
 import { ProjectEntity } from "../../entities/project.entity";
 import { ProjectRepository } from "../../repositories/project.repository";
 
-export interface Filters {
-    portfolioType?: "quantum-md" | "personal";
-    tags?: string[];
-    search?: string;
-    page?: number;
-    limit?: number;
+
+export interface IFindAllProjectsUseCase {
+    execute(queryParamsDto?: QueryParamsDto ): Promise<{projects: ProjectEntity[], pagination: object}>;
 }
 
-export interface IFindAllProjectUseCase {
-    execute(filters?: Filters): Promise<{projects: ProjectEntity[], totalItems: number}>;
-}
 
-export class FindAllProjectUseCase implements IFindAllProjectUseCase {
+export class FindAllProjectsUseCase implements IFindAllProjectsUseCase {
     constructor(
         private readonly projectRepository: ProjectRepository,
     ) {}
 
-    execute(filters?: Filters): Promise<{projects: ProjectEntity[], totalItems: number}> {
-        return this.projectRepository.findAllProjects(filters || {});
+    execute(queryParamsDto?: QueryParamsDto): Promise<{projects: ProjectEntity[], pagination: object}> {
+        return this.projectRepository.findAllProjects(queryParamsDto);
     }
 }

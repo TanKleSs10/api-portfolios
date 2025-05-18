@@ -4,10 +4,10 @@ export class JwtAdapter {
 
   constructor(private readonly secret: Secret){}
 
-  async generateToken(
+  async generateToken<T>(
     payload: any,
     duration: SignOptions["expiresIn"] = "2h"
-  ){
+  ): Promise<T | null> {
     return new Promise((resolve) => {
       jwt.sign(
         payload,
@@ -15,13 +15,13 @@ export class JwtAdapter {
         { expiresIn: duration },
         (error, token) => {
           if (error) return resolve(null);
-          resolve(token);
+          resolve(token as T);
         }
       );
     });
   }
 
-  verifyToken(token: string) {
+  verifyToken<T>(token: string): Promise<T | null> {
     
     return new Promise(resolve => {
       
@@ -29,7 +29,7 @@ export class JwtAdapter {
       
         if(error) resolve(null);
       
-        resolve(decoded);
+        resolve(decoded as T);
       });
   })
   }

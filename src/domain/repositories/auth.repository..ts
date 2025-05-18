@@ -1,10 +1,10 @@
 import { LoginUserDto } from "../dtos/auth/loginUser.dto";
-import { UserEntity } from "../entities/user.entity";
+import { UserResponseDto } from "../dtos/user/userResponseDto";
 
 export abstract class AuthRepository {
-    abstract loginUser(loginUserDto: LoginUserDto): Promise<UserEntity>;
+    abstract loginUser(loginUserDto: LoginUserDto): Promise<{user: UserResponseDto, token: unknown}>;
     abstract sendValidationEmail(email: string, name: string): Promise<{success: boolean, token: unknown}>;
-    abstract generateToken(payload: any): Promise<unknown>;
-    abstract verifyEmail(token: string): Promise<UserEntity>;
+    abstract generateToken<T>(payload: any): Promise<T | null>;
+    abstract verifyEmail(token: string): Promise<boolean>;
     abstract encryptPassword(password: string): Promise<string>;
 }

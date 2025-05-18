@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import { ProjectRepository } from "../../domain/repositories/project.repository";
 import { CreateProjectUseCase } from "../../domain/usecases/project/createProject.usecase";
 import { CreateProjectDto } from "../../domain/dtos/project/createProject.dto";
-import { FindAllProjectUseCase } from "../../domain/usecases/project/findAllProjects.usecase";
+import { FindAllProjectsUseCase } from "../../domain/usecases/project/findAllProjects.usecase";
 import { FindProjectBySlugAndTypeUseCase } from "../../domain/usecases/project/FindProjectBySlugAndType.usecase";
 import { UpdateProjectDto } from "../../domain/dtos/project/updateProject.dto";
 import { UpdateProjectUseCase } from "../../domain/usecases/project/updateProject.usecase";
 import { DeleteProjectUseCase } from "../../domain/usecases/project/deleteProject.usecase";
-import { Filters} from "../../domain/usecases/project/findAllProjects.usecase";
+import { QueryParamsDto } from "../../domain/dtos/project/queryParams.dto";
 
 export class ProjectController {
     constructor(private readonly projectRepository: ProjectRepository) {}
@@ -40,38 +40,22 @@ export class ProjectController {
     }
 
     public getAllProjects = (req: Request, res: Response) => {
-        let tags: string[] = [];
-
-        if (req.query.tags) {
-            if (Array.isArray(req.query.tags)) {
-                tags = req.query.tags.map(tag => String(tag));
-            } else if (typeof req.query.tags === 'string') {
-                tags = req.query.tags.split(",").map(tag => tag.trim());
-            } else if (typeof req.query.tags === 'object') {
-                tags = Object.values(req.query.tags).map(tag => String(tag));
-            }
-        }
-
-        const filters: Filters = {
-            portfolioType: req.query.portfolioType as "quantum-md" | "personal",
-            tags,
-            page: req.query.page ? +req.query.page : 1,
-            search: req.query.search as string,
-            limit: req.query.limit ? +req.query.limit : 10
-        };
-    
-        new FindAllProjectUseCase(this.projectRepository).execute(filters)
-            .then(({ projects, totalItems }) => {
+        const { portfolioType, tags, page, search, limit } = req.query;
+        const [error, queryParams] = QueryParamsDto.create({ portfolioType, tags, page, search, limit });
+        if(error){
+            res.status(400).json({
+                success: false,
+                message: "Error al obtener proyectos",
+                data: error
+            });
+        }else{
+            new FindAllProjectsUseCase(this.projectRepository).execute(queryParams)
+            .then(({ projects, pagination }) => {
                 res.status(200).json({
                     successs: true,
                     message: "Proyectos obtenidos correctamente",
                     data: projects,
-                    pagination: {
-                        page: filters.page,
-                        limit: filters.limit,
-                        totalItems: totalItems,
-                        totalPages: Math.ceil(totalItems / filters.limit!)
-                    }
+                    pagination: pagination
                 });
             })
             .catch((error) => {
@@ -82,6 +66,7 @@ export class ProjectController {
                     error: error.message || error
                 });
             });
+        }
     }
 
 

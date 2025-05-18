@@ -5,6 +5,8 @@ export const envs = {
     ENV: get("ENV").required().asString(),
     PORT: get("PORT").required().asPortNumber(),
     MONGODB_URI: get("MONGODB_URI").required().asString(),
+    WEBSERVICE_URL: get("WEBSERVICE_URL").required().asString(),
+    IS_SENT_EMAIL: get("IS_SENT_EMAIL").default("false").asBool(),
     
     CLOUDINARY_CLOUD_NAME: get("CLOUDINARY_CLOUD_NAME").required().asString(),
     CLOUDINARY_API_KEY: get("CLOUDINARY_API_KEY").required().asString(),

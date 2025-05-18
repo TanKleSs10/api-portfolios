@@ -10,7 +10,8 @@
     "docker:test:down": "docker compose -f docker-compose.test.yml --env-file .env.test down",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "seed": "ts-node-dev ./src/infrastructure/seeds/seed.ts"
   },
   "keywords": [],
   "author": "",

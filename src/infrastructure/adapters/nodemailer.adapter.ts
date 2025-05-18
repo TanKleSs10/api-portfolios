@@ -16,19 +16,26 @@ export interface Attachment {
 export class MailerAdapter {
     private transporter: Transporter;
 
-    constructor(mailerServices: string, mailerEmail: string, mailerSecret: string) {
+    constructor(
+        mailerServices: string, 
+        mailerEmail: string, 
+        mailerSecret: string,
+        private readonly is_sent_email: boolean,
+    ){
         this.transporter = nodemailer.createTransport({
             service: mailerServices,
             auth: {
                 user: mailerEmail,
                 pass: mailerSecret
             }
-        })
+        });
     }
 
     async sendMail(sendMailOptions: SendMailOptions): Promise<boolean> {
         const { to, subject, htmlBody, attachments = [] } = sendMailOptions;
         try {
+            // do you want to send the email? configured in the env file
+            if(!this.is_sent_email) return true;
             const sentInfo = await this.transporter.sendMail({
                 to,
                 subject,
@@ -36,7 +43,7 @@ export class MailerAdapter {
                 attachments,
             });
 
-            console.log("Message sent: %s", sentInfo);
+            // console.log("Message sent: %s", sentInfo);
 
             return true
         } catch (error) {

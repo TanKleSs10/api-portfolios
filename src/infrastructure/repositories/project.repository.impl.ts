@@ -1,9 +1,9 @@
 import { ProjectDataSource } from "../../domain/datasources/project.datasource";
 import { CreateProjectDto } from "../../domain/dtos/project/createProject.dto";
+import { QueryParamsDto } from "../../domain/dtos/project/queryParams.dto";
 import { UpdateProjectDto } from "../../domain/dtos/project/updateProject.dto";
 import { ProjectEntity } from "../../domain/entities/project.entity";
 import { ProjectRepository } from "../../domain/repositories/project.repository";
-import { Filters } from "../../domain/usecases/project/findAllProjects.usecase";
 import { CloudinaryAdapter } from "../adapters/cloudinary.adapter";
 
 export class ProjectRepositoryImpl implements ProjectRepository {
@@ -19,8 +19,8 @@ export class ProjectRepositoryImpl implements ProjectRepository {
         return this.projectDataSource.findProjectBySlugAndType(slug, portfolioType);
     }
 
-    async findAllProjects(filters: Filters = {}): Promise<{projects: ProjectEntity[], totalItems: number}> {
-        const { portfolioType, tags, page = 1, limit = 10, search } = filters;
+    async findAllProjects(queryParamsDto: QueryParamsDto): Promise<{projects: ProjectEntity[], pagination: object}> {
+        const { portfolioType, tags, page = 1, limit = 10, search } = queryParamsDto;
         const query: any = {};
 
         if (portfolioType) {
@@ -43,7 +43,15 @@ export class ProjectRepositoryImpl implements ProjectRepository {
             this.projectDataSource.countProjects(query)
         ]);
         
-        return {projects, totalItems};
+        return {
+            projects, 
+            pagination: {
+                page,
+                limit,
+                totalItems,
+                totalPages: Math.ceil(totalItems / limit)
+            }
+        };
     }
 
     updateProject(updateProjectDto: UpdateProjectDto): Promise<ProjectEntity> {

@@ -45,8 +45,8 @@ export class UserDataSourceImpl implements UserDataSource {
 
     // Funtions of Authentication 
 
-    async emailValidated(email: string): Promise<UserEntity> {
-        const user = await userModel.updateOne({ email }, { emailValidated: true });
-        return UserEntity.fromObject(user);
+    async emailValidated(email: string): Promise<boolean> {
+        const user = await userModel.updateOne({ email }, { emailValidated: true }, { new: true, runValidators: true });
+        return user.acknowledged;
     }
 }

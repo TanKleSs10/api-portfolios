@@ -9,5 +9,5 @@ export abstract class UserDataSource {
     abstract findAllUsers(): Promise<UserEntity[]>;
     abstract updateUser(updateUserDto: UpdateUserDto): Promise<UserEntity>;
     abstract deleteUser(id: string): Promise<UserEntity>;
-    abstract emailValidated(email: string): Promise<UserEntity>;
+    abstract emailValidated(email: string): Promise<boolean>;
 }

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { LoginUserDto } from "../../domain/dtos/auth/loginUser.dto";
 import { AuthRepository } from "../../domain/repositories/auth.repository.";
 import { LoginUseCase } from "../../domain/usecases/auth/login.usecase";
+import { VerifyEmailUseCase } from "../../domain/usecases/auth/verifyEmail.usecase";
 
 export class AuthController {
     constructor(
@@ -35,4 +36,20 @@ export class AuthController {
             }
         }
 
+    verifyEmail = (req: Request, res: Response) => {
+        const token = req.params.token;
+        new VerifyEmailUseCase(this.authRepository).execute(token).then(success => {
+            res.status(200).json({
+                success,
+                message: "Email verificado correctamente",
+            });
+        }).catch(error => {
+            console.log(error)
+            res.status(400).json({
+                success: false,
+                message: "Error al verificar el email",
+                data: error
+                });
+        });
+    }
 }

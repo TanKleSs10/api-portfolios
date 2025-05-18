@@ -9,7 +9,7 @@ export class AuthRoutes {
         
         // Routes
         router.post("/login", authController.loginUser);
-        router.post("/verify/:token", );
+        router.get("/verify/:token", authController.verifyEmail);
         return router;
     }
 }

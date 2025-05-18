@@ -24,7 +24,7 @@ import { envs } from "./envs";
 // Dependdenices
     const jwtAdapter = new JwtAdapter(envs.JWT_SEED);
     const bcriptAdapter = new BcryptAdapter();
-    const emailService = new MailerAdapter(envs.MAILER_SERVICE, envs.MAILER_EMAIL, envs.MAILER_SECRET,);
+    const emailService = new MailerAdapter(envs.MAILER_SERVICE, envs.MAILER_EMAIL, envs.MAILER_SECRET, envs.IS_SENT_EMAIL);
     const mailTemplateManager = new MailTemplateManager();
 
     // Datasources
@@ -35,7 +35,7 @@ import { envs } from "./envs";
     const tagDataSource = new TagDataSourceImpl();
 
     // Repositories
-    const authRepository = new AuthRepositoryImp(jwtAdapter, bcriptAdapter, emailService, userDataSource, mailTemplateManager);
+    const authRepository = new AuthRepositoryImp(jwtAdapter, bcriptAdapter, emailService, userDataSource, mailTemplateManager, envs.WEBSERVICE_URL);
     const userRepository = new UserRepositoryImpl(authRepository ,userDataSource);
     const projectRepository = new ProjectRepositoryImpl(projectDataSource);
     const postRepository = new PostRepositoryImpl(postDataSource);
