@@ -4,7 +4,7 @@ import { JwtAdapter } from '../../infrastructure/adapters/jwt.adapter';
 import { envs } from '../../config/envs';
 import { userModel } from '../../infrastructure/models/user/userModel';
 
-interface userAuth {
+export interface userAuth {
     id: string;
     email: string;
     rol: "admin" | "editor";

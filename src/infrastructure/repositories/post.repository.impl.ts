@@ -22,8 +22,14 @@ export class PostRepositoryImpl implements PostRepository {
         return this.postDataSource.getPost(id);
     }
 
-    updatePost(updatePostDto: UpdatePostDto): Promise<PostEntity> {
-        return this.postDataSource.updatePost(updatePostDto);
+    async updatePost(updatePostDto: UpdatePostDto): Promise<PostEntity> {
+        const post = await this.postDataSource.getPost(updatePostDto.id);
+        if (!post) throw new Error("Post not found.");
+        console.log(updatePostDto.user_role, updatePostDto.userId);
+        if (updatePostDto.userId !== post.id && updatePostDto.user_role !== "admin") throw new Error("User not authorized to update this post.");
+        const postUpdated = await this.postDataSource.updatePost(updatePostDto);
+        if (!postUpdated) throw new Error("Error updating post.");
+        return postUpdated;
     }
 
     async deletePost(id: string): Promise<PostEntity> {

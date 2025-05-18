@@ -6,6 +6,7 @@ export class PostEntity {
         public content: string,
         public images: string[] = [], // Contiene ids de las imagenes
         public tags: string[] = [], // Contiene ids de los tags
+        public user: string, // Contiene el id del usuario que creo el post
         public isPublic: boolean = false,
         public createdAt?: Date,
         public updatedAt?: Date,
@@ -20,6 +21,7 @@ export class PostEntity {
             content,
             images,
             tags,
+            user,
             isPublic,
             createdAt,
             updatedAt,
@@ -36,6 +38,7 @@ export class PostEntity {
         content,
         Array.isArray(images) ? images : [],
         Array.isArray(tags) ? tags : [],
+        user,
         isPublic,
         createdAt ? new Date(createdAt) : undefined,
         updatedAt ? new Date(updatedAt) : undefined,

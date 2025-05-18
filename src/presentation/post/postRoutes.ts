@@ -8,6 +8,7 @@ export class PostRoutes {
 
         // Middlewares
         router.use([AuthMiddleware.validateToken]);
+        
         const postController = container.postController;
 
         router.post("/", AuthMiddleware.authorizeRoles("admin", "editor"), postController.createPost);

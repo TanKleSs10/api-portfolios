@@ -13,9 +13,9 @@ export class PostController {
         private readonly postRepository: PostRepository
     ){}
 
-    public createPost = (req:Request, res: Response) => {
+    public createPost = (req: Request, res: Response) => {
         req.body.slug = req.body.title.toLowerCase().replace(/\s/g, "-");
-        const [error, createPostDto] = CreatePostDto.create(req.body);
+        const [error, createPostDto] = CreatePostDto.create({ ...req.body, user: req.user.id });
         if(error){
             res.status(400).json({
                 success: false,
@@ -75,7 +75,7 @@ export class PostController {
     public updatePost = (req: Request, res: Response) => {
         const { id } = req.params;
         req.body.slug = req.body.title.toLowerCase().replace(/\s/g, "-");
-        const [error, updatePostDto] = UpdatePostDto.create({ id, ...req.body });
+        const [error, updatePostDto] = UpdatePostDto.create({ id, ...req.body, userId: req.user.id, user_role: req.user.rol });
         console.log(updatePostDto?.id);
         if (error) {
             res.status(400).json({

@@ -11,7 +11,7 @@ enum Role {
         collection: "users",
     },
 })
-class UserModel {
+export class UserModel {
     @prop({
         required: true,
         trim: true,

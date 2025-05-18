@@ -2,6 +2,7 @@ import { getModelForClass, modelOptions, prop, Ref } from "@typegoose/typegoose"
 import { Types } from "mongoose";
 import { ImageModel } from "./ImageModel";
 import { TagModel } from "./tag/tagModel";
+import { UserModel } from "./user/userModel";
 
 @modelOptions({
     schemaOptions: {
@@ -24,6 +25,9 @@ export class PostModel {
 
     @prop({ type: () => [Types.ObjectId], ref: 'TagModel', default: [] })
     tags?: Ref<TagModel>[];
+
+    @prop({ ref: () => UserModel, required: true })
+    user!: Ref<UserModel>;
 
     @prop({default: false}) 
     isPublic!: boolean;
