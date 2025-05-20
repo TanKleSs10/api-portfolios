@@ -6,15 +6,19 @@ import { DeleteImageUseCase } from "../../domain/usecases/image/deleteImage.usec
 import { UpdateImageUseCase } from "../../domain/usecases/image/updateImage.usecase";
 import { UpdateImageDto } from "../../domain/dtos/image/updateImage.dto";
 import { UpdateMainImageUseCase } from "../../domain/usecases/image/updateMainImage.usecase";
+import { WinstonLogger } from "../../config/winstonConfig";
 
 export class ImageController {
-
-    constructor(private readonly imageRepository: ImageRepository){}
+    constructor(
+        private readonly imageRepository: ImageRepository,
+        private readonly logger: WinstonLogger
+    ){}
 
     public createImage = async (req: Request, res: Response) => {
         const { entityType, entityId } = req.params;
         // Validar que el tipo de entidad sea correcto
         if (!["projects", "posts"].includes(entityType)) {
+            this.logger.error("Invalid entity type", { entityType }, "imageController");
             res.status(400).json({
                 success: false,
                 message: "Invalid entity type.",
@@ -44,6 +48,7 @@ export class ImageController {
                 });
 
                 if(error){
+                    this.logger.error("Error creating image", { error }, "imageController");
                     return Promise.reject(error);
                 }
                 // crear la imagen
@@ -57,9 +62,9 @@ export class ImageController {
                 message: "Imagen creada correctamente",
                 data: createdImages
             });
-
          }catch (error) {
-             res.status(400).json({
+            this.logger.error("error creating image", {error}, "ImageController");
+            res.status(400).json({
                  success: false,
                  message: "Error al crear imagen",
                  data: error
@@ -76,7 +81,7 @@ export class ImageController {
                 data: image
             });
         }).catch(error => {
-            console.log("Error en setMainImage", error);
+            this.logger.error("Error updating main image", { error }, "imageController");
             res.status(400).json({
                 success: false,
                 message: "Error al actualizar imagen principal",
@@ -102,6 +107,7 @@ export class ImageController {
                     data: image
                 });
             }).catch(error => {
+                this.logger.error("error updating image", error, "imageController");
                 res.status(400).json({
                     success: false,
                     message: "Error al actualizar imagen",
@@ -120,7 +126,7 @@ export class ImageController {
                 data: image
             });
         }).catch(error => {
-            console.log("Error en deleteImage", error);
+            this.logger.error("Error deleting image", error, "imageController");
             res.status(400).json({
                 success: false,
                 message: "Error al eliminar imagen",

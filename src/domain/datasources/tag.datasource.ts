@@ -5,9 +5,8 @@ import { TagEntity } from "../entities/tag.entity";
 export abstract class TagDataSource {
     abstract createTag(createTagDto: CreateTagDto): Promise<TagEntity>;
     abstract findTagById(id: string): Promise<TagEntity>;
-    abstract findTagByName(name: string): Promise<TagEntity>;
+    abstract findTagByName(name: string): Promise<TagEntity | null>;
     abstract findAllTags(): Promise<TagEntity[]>;
     abstract updateTag(updateTagDto: UpdateTagDto): Promise<TagEntity>;
     abstract deleteTag(id: string): Promise<TagEntity>; 
-
 }

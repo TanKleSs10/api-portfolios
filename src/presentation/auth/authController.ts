@@ -3,16 +3,19 @@ import { LoginUserDto } from "../../domain/dtos/auth/loginUser.dto";
 import { AuthRepository } from "../../domain/repositories/auth.repository.";
 import { LoginUseCase } from "../../domain/usecases/auth/login.usecase";
 import { VerifyEmailUseCase } from "../../domain/usecases/auth/verifyEmail.usecase";
+import { WinstonLogger } from "../../config/winstonConfig";
 
 export class AuthController {
     constructor(
         private readonly authRepository: AuthRepository,
+        private readonly logger: WinstonLogger
     ) {}
 
     loginUser = (req:Request, res: Response) => {
             console.log(req.body)
             const [error, loginUserDto] = LoginUserDto.create(req.body);
             if(error) {
+                this.logger.error("Error creating login dto", { error: error }, "AuthController");
                 res.status(400).json({
                     success: false,
                     message: "Error al iniciar sesión",
@@ -26,7 +29,7 @@ export class AuthController {
                         data: user
                     });
                 }).catch(error => {
-                    console.log(error)
+                    this.logger.error("Error creating login", error, "AuthController");
                     res.status(400).json({
                         success: false,
                         message: "Error al iniciar sesión",
@@ -44,7 +47,7 @@ export class AuthController {
                 message: "Email verificado correctamente",
             });
         }).catch(error => {
-            console.log(error)
+            this.logger.error("Error verifying email", error, "AuthController");
             res.status(400).json({
                 success: false,
                 message: "Error al verificar el email",

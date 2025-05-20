@@ -20,19 +20,21 @@ import { ProjectController } from "../presentation/project/projectController";
 import { TagController } from "../presentation/tag/tagController";
 import { UserController } from "../presentation/user/userController";
 import { envs } from "./envs";
+import { WinstonLogger } from "./winstonConfig";
 
 // Dependdenices
     const jwtAdapter = new JwtAdapter(envs.JWT_SEED);
     const bcriptAdapter = new BcryptAdapter();
     const emailService = new MailerAdapter(envs.MAILER_SERVICE, envs.MAILER_EMAIL, envs.MAILER_SECRET, envs.IS_SENT_EMAIL);
     const mailTemplateManager = new MailTemplateManager();
+    const logger = new WinstonLogger();
 
     // Datasources
     const userDataSource = new UserDataSourceImpl();
     const projectDataSource = new ProjectDataSourceImpl();
     const postDataSource = new PostDataSourceImpl();
     const imageDataSource = new ImageDataSourceImpl();
-    const tagDataSource = new TagDataSourceImpl();
+    const tagDataSource = new TagDataSourceImpl(logger);
 
     // Repositories
     const authRepository = new AuthRepositoryImp(jwtAdapter, bcriptAdapter, emailService, userDataSource, mailTemplateManager, envs.WEBSERVICE_URL);
@@ -43,12 +45,12 @@ import { envs } from "./envs";
     const tagRepository = new TagRepositoryImpl(tagDataSource);
 
     // Controllers
-    const authController = new AuthController(authRepository);
-    const userController = new UserController(userRepository);
-    const projectController = new ProjectController(projectRepository);
-    const postController = new PostController(postRepository);
-    const imageController = new ImageController(imageRepository);
-    const tagController = new TagController(tagRepository);
+    const authController = new AuthController(authRepository, logger);
+    const userController = new UserController(userRepository, logger);
+    const projectController = new ProjectController(projectRepository, logger);
+    const postController = new PostController(postRepository, logger);
+    const imageController = new ImageController(imageRepository, logger);
+    const tagController = new TagController(tagRepository, logger);
 
     export const container = {
     authController,

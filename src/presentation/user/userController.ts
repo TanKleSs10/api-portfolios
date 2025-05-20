@@ -7,14 +7,18 @@ import { CreateUserUseCase } from "../../domain/usecases/user/createUser.usecase
 import { UpdateUserDto } from "../../domain/dtos/user/updateuser.dto";
 import { UpdateUserUseCase } from "../../domain/usecases/user/updateUser.usecase";
 import { DeleteUserUseCase } from "../../domain/usecases/user/deleteUser.usecase";
-import { LoginUserDto } from "../../domain/dtos/auth/loginUser.dto";
+import { WinstonLogger } from "../../config/winstonConfig";
 
 export class UserController {
-    constructor(private readonly userRepository: UserRepository) {}
+    constructor(
+        private readonly userRepository: UserRepository,
+        private readonly logger: WinstonLogger
+    ) {}
     
     createUser = (req:Request, res: Response) => {
         const [error, createUserDto] = CreateUserDto.create(req.body);
         if(error){
+            this.logger.error("Error creating user", { error: error }, "userController");
             res.status(400).json({
                 success: false,
                 message: "Error al crear usuario",
@@ -28,7 +32,7 @@ export class UserController {
                     data: user
                 });
             }).catch(error => {
-                console.log(error);
+                this.logger.error("Error creating user", error, "userController");
                 res.status(400).json({
                     success: false,
                     message: "Error al crear usuario",
@@ -46,7 +50,8 @@ export class UserController {
                  data: users
              });
         }).catch(error => {
-             res.status(400).json({
+            this.logger.error("Error fetching users", { error: error as string }, "userController");
+            res.status(400).json({
                  success: false,
                  message: "Error al obtener usuarios",
                  data: error
@@ -63,6 +68,7 @@ export class UserController {
                  data: user
              });
         }).catch(error => {
+            this.logger.error("Error fetching user", { error: error }, "userController");
              res.status(400).json({
                  success: false,
                  message: "Error al obtener usuario",
@@ -79,8 +85,13 @@ export class UserController {
                 message: "Usuario obtenido correctamente",
                 data: user
             });
-        }).catch(err => {
-            res.status(400).json(err);
+        }).catch(error => {
+            this.logger.error("Error fetching user", error, "userController");
+            res.status(400).json({
+                success: false,
+                message: "Error al obtener usuario",
+                data: error
+            });
         });
     }
 
@@ -88,6 +99,7 @@ export class UserController {
         const { id } = req.params;
         const [error, updateUserDto] = UpdateUserDto.create({...req.body, id});
         if(error) {
+            this.logger.error("Error updating user", { error: error }, "userController");
             res.status(400).json({
                 success: false,
                 message: "Error al actualizar usuario",
@@ -101,6 +113,7 @@ export class UserController {
                     data: user
                 });
             }).catch(error => {
+                this.logger.error("Error updating user", { error: error }, "userController");
                 res.status(400).json({
                     success: false,
                     message: "Error al actualizar usuario",
@@ -119,6 +132,7 @@ export class UserController {
                  data: user
              });
         }).catch(error => {
+            this.logger.error("Error deleting user", error, "userController");
              res.status(400).json({
                  success: false,
                  message: "Error al eliminar usuario",

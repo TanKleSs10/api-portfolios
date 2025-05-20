@@ -8,10 +8,10 @@ export interface ICreateTagUseCase {
 
 export class CreateTagUseCase implements ICreateTagUseCase {
     constructor(
-        private readonly tagRepository: TagRepository
+        private readonly tagRepository: TagRepository,
     ){}
 
     execute(createTagDto: CreateTagDto): Promise<TagEntity> { 
-        return this.tagRepository.createTag(createTagDto);
+         return this.tagRepository.createTag(createTagDto);
     }
 }

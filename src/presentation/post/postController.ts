@@ -7,16 +7,19 @@ import { FindPostByIdUseCase } from "../../domain/usecases/post/findPostById.use
 import { UpdatePostDto } from "../../domain/dtos/post/updatePost.dto";
 import { UpdatePostUseCase } from "../../domain/usecases/post/updatePost.usecase";
 import { DeletePostUseCase } from "../../domain/usecases/post/delete.Post.usecase";
+import { WinstonLogger } from "../../config/winstonConfig";
 
 export class PostController {
     constructor(
-        private readonly postRepository: PostRepository
+        private readonly postRepository: PostRepository,
+        private readonly logger: WinstonLogger
     ){}
 
     public createPost = (req: Request, res: Response) => {
         req.body.slug = req.body.title.toLowerCase().replace(/\s/g, "-");
         const [error, createPostDto] = CreatePostDto.create({ ...req.body, user: req.user.id });
         if(error){
+            this.logger.error("Error al crear post", { error }, "postController");
             res.status(400).json({
                 success: false,
                 message: "Error al crear post",  
@@ -30,6 +33,7 @@ export class PostController {
                     data: post
                 });
             }).catch(error => {
+                this.logger.error("Error al crear post", error, "postController");
                 res.status(400).json({
                     success: false,
                     message: "Error al crear post",  
@@ -47,6 +51,7 @@ export class PostController {
                 data: post
             });
         }).catch(error => {
+            this.logger.error("Error al obtener posts", error, "postController");
             res.status(400).json({
                 success: false,
                 message: "Error al obtener posts",
@@ -64,6 +69,7 @@ export class PostController {
                 data: post
             });
         }).catch(error => {
+            this.logger.error("Error al obtener post", error, "postController");
             res.status(400).json({
                 success: false,
                 message: "Error al obtener post",
@@ -78,6 +84,7 @@ export class PostController {
         const [error, updatePostDto] = UpdatePostDto.create({ id, ...req.body, userId: req.user.id, user_role: req.user.rol });
         console.log(updatePostDto?.id);
         if (error) {
+            this.logger.error("Error al actualizar post", { error }, "postController");
             res.status(400).json({
                 success: false,
                 message: "Error al actualizar post",
@@ -91,7 +98,7 @@ export class PostController {
                     data: post
                 });
             }).catch(error => {
-                console.log(error);
+                this.logger.error("Error al actualizar post", error, "postController");
                 res.status(400).json({
                     success: false,
                     message: "Error al actualizar post",
@@ -110,7 +117,7 @@ export class PostController {
                 data: post
             });
         }).catch(error => {
-            console.log(error)
+            this.logger.error("Error al eliminar post", error, "postController");
             res.status(400).json({
                 success: false,
                 message: "Error al eliminar post",
