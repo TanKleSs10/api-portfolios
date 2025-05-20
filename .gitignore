@@ -8,6 +8,7 @@ build
 .env.test
 
 # Log files
+logs/
 *.log
 
 # Editor and IDE related files
