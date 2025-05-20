@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { WinstonLogger } from '../../infrastructure/logger/winstonLogger.adapter';
+
 import { JwtAdapter } from '../../infrastructure/adapters/jwt.adapter';
 import { envs } from '../../config/envs';
 import { userModel } from '../../infrastructure/models/user/userModel';
+import { WinstonLogger } from '../../config/winstonConfig';
 
 export interface userAuth {
     id: string;

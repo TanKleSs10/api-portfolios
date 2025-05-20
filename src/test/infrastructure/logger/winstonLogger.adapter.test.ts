@@ -1,5 +1,7 @@
-import { WinstonLogger, customLogFormatter } from "../../../infrastructure/logger/winstonLogger.adapter";
+
 import { Logger } from "winston";
+import { WinstonLogger } from "../../../config/winstonConfig";
+import { customLogFormatter } from "../../../infrastructure/logger/customLogFormatter";
 
 describe("Winston Logger Adapter", () => {
   let winstonLogger: WinstonLogger;

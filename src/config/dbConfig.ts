@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { LoggerInterface } from "../infrastructure/logger/winstonLogger.adapter";
+import { LoggerInterface } from "./winstonConfig";
+
 
 interface Options {
   MONGODB_URI: string;
@@ -18,9 +19,9 @@ export class DbConfig {
   async dbConnection(): Promise<void> {
     try {
       await mongoose.connect(this.uri);
-      this.logger.info("MongoDB connected successfully.");
+      this.logger.info("MongoDB connected successfully.", {}, "dbConfig");
     } catch (error) {
-      this.logger.error("Error connecting to MongoDB:" + error);
+      this.logger.error("Error connecting to MongoDB:", { error }, "dbConfig");
       throw new Error("MongoDB connection failed.");
     }
   }
@@ -28,9 +29,9 @@ export class DbConfig {
   async dbDisconnect(): Promise<void> {
     try {
       await mongoose.disconnect();
-      this.logger.info("MongoDB disconnected successfully.");
+      this.logger.info("MongoDB disconnected successfully.", {}, "dbConfig");
     } catch (error) {
-      this.logger.error("Error disconnecting from MongoDB:" + error);
+      this.logger.error("Error disconnecting from MongoDB:", { error }, "dbConfig");
       throw new Error("MongoDB disconnection failed.");
     }
   }

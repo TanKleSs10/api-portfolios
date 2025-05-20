@@ -1,6 +1,7 @@
 import { DbConfig } from "../../config/dbConfig";
 import { envs } from "../../config/envs";
-import { WinstonLogger } from "../logger/winstonLogger.adapter";
+import { WinstonLogger } from "../../config/winstonConfig";
+
 
 const logger = new WinstonLogger()
 const mongoDB = new DbConfig({

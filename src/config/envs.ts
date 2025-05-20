@@ -18,3 +18,6 @@ export const envs = {
     MAILER_SECRET: get("MAILER_SECRET").required().asString(),
     MAILER_SERVICE: get("MAILER_SERVICE").required().asString(),
 };
+
+// if env is prod is true else false this is used to set the logger level
+export const isProd = envs.ENV === "prod" ? true : false;

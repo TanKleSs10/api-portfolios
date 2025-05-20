@@ -1,6 +1,7 @@
 import express, { Router } from "express";
-import { LoggerInterface } from "../infrastructure/logger/winstonLogger.adapter";
+
 import http from "http";
+import { LoggerInterface } from "../config/winstonConfig";
 
 interface Options {
     port: number;
@@ -34,7 +35,7 @@ export class Server {
 
         // Start server
         this.server = this.app.listen(this.port, () => {
-            this.logger.info(`Server running on http://localhost:${this.port}`);
+            this.logger.info(`Server running on http://localhost:${this.port}`, {}, "server");
         });
         
     }

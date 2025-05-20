@@ -2,7 +2,8 @@
 import request from 'supertest';
 import express, { Router } from 'express';
 import { Server } from '../../presentation/server';
-import { WinstonLogger } from '../../infrastructure/logger/winstonLogger.adapter';
+import { WinstonLogger } from '../../config/winstonConfig';
+
 
 describe('Server (light integration)', () => {
   let serverInstance: Server;

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
-import { LoggerInterface } from '../../infrastructure/logger/winstonLogger.adapter';
+
 import { DbConfig } from '../../config/dbConfig';
+import { LoggerInterface } from '../../config/winstonConfig';
 
 
 jest.mock('mongoose', () => ({
