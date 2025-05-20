@@ -1,0 +1,22 @@
+
+services:
+  quantum-db-test:
+    image: mongo:7
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
+    restart: always
+    volumes:
+      - quantum-db-data-test:/data/db
+    command: ["--auth"]
+    networks:
+      - quantum-net
+
+networks:
+  quantum-net:
+    driver: bridge
+
+volumes:
+  quantum-db-data-test:

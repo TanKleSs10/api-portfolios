@@ -1,6 +1,7 @@
 import { DbConfig } from "./config/dbConfig";
 import { envs } from "./config/envs";
-import { WinstonLogger } from "./infrastructure/logger/winstonLogger.adapter";
+import { WinstonLogger } from "./config/winstonConfig";
+
 import { AppRoutes } from "./presentation/routes";
 import { Server } from "./presentation/server";
 

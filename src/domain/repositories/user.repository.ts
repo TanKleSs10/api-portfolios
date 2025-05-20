@@ -1,13 +1,11 @@
-
 import { CreateUserDto } from "../dtos/user/createuser.dto";
 import { UpdateUserDto } from "../dtos/user/updateuser.dto";
-import { UserEntity } from "../entities/user.entity";
+import { UserResponseDto } from "../dtos/user/userResponseDto";
 
 export abstract class UserRepository {
-    abstract createUser(createUserDto: CreateUserDto): Promise<UserEntity>;
-    abstract findUserById(id: string): Promise<UserEntity>;
-    abstract findUserById(email: string): Promise<UserEntity>;
-    abstract findAllUsers(): Promise<UserEntity[]>;
-    abstract updateUser(updateUserDto: UpdateUserDto): Promise<UserEntity>;
-    abstract deleteUser(id: string): Promise<UserEntity>;
+    abstract createUser(createUserDto: CreateUserDto): Promise<{ user: UserResponseDto, token: unknown }>;
+    abstract findUserById(id: string): Promise<UserResponseDto>;
+    abstract findAllUsers(): Promise<UserResponseDto[]>;
+    abstract updateUser(updateUserDto: UpdateUserDto): Promise<UserResponseDto>;
+    abstract deleteUser(id: string): Promise<UserResponseDto>;
 }

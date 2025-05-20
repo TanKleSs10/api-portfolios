@@ -7,9 +7,18 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGODB_URI=mongodb://quantum:quantum@quantum-db:27017/
-      - PORT=3000
-      - ENV=dev
+      - MONGODB_URI=${MONGODB_URI}
+      - PORT=${PORT}
+      - ENV=${ENV}
+      - WEBSERVICE_URL=${WEBSERVICE_URL}
+      - IS_SENT_EMAIL=${IS_SENT_EMAIL}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - JWT_SEED=${JWT_SEED}
+      - MAILER_EMAIL=${MAILER_EMAIL}
+      - MAILER_SECRET=${MAILER_SECRET}
+      - MAILER_SERVICE=${MAILER_SERVICE}
     restart: always
     volumes:
       - .:/app
@@ -23,8 +32,8 @@ services:
     ports:
       - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=quantum
-      - MONGO_INITDB_ROOT_PASSWORD=quantum
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
     restart: always
     volumes:
       - quantum-db-data:/data/db

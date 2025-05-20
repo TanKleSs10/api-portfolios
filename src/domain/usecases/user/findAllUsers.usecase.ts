@@ -1,8 +1,8 @@
-import { UserEntity } from "../../entities/user.entity";
+import { UserResponseDto } from "../../dtos/user/userResponseDto";
 import { UserRepository } from "../../repositories/user.repository";
 
 export interface IFindAllUsersUseCase {
-    execute(): Promise<UserEntity[]>;
+    execute(): Promise<UserResponseDto[]>;
 } 
 
 export class FindAllUsersUseCase implements IFindAllUsersUseCase {
@@ -10,7 +10,7 @@ export class FindAllUsersUseCase implements IFindAllUsersUseCase {
         private readonly userRepository: UserRepository
     ){}
 
-    execute(): Promise<UserEntity[]> {
+    execute(): Promise<UserResponseDto[]> {
         return this.userRepository.findAllUsers();
     }
 }   
