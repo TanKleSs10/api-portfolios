@@ -1,7 +1,7 @@
 import { createLogger, format, transports, Logger } from "winston";
 import { customLogFormatter } from "../infrastructure/logger/customLogFormatter";
-import { isProd } from "./envs";
 import DailyRotateFile from "winston-daily-rotate-file";
+import { isProd } from "./envs";
 
 export interface LoggerInterface {
   info(message: string, context?: Record<string, any> | Error, layer?: string): void;
@@ -11,15 +11,14 @@ export interface LoggerInterface {
 }
 
 export class WinstonLogger implements LoggerInterface {
-  private readonly isProduction: boolean = isProd;
   private logger: Logger;
-
   constructor(loggerInstance?: Logger) {
+    const isProduction = isProd; 
     this.logger =
       loggerInstance ||
       createLogger({
-        level: this.isProduction ? "info" : "debug",
-        format: this.isProduction
+        level: isProduction ? "info" : "debug",
+        format: isProduction
           ? format.combine(
               format.errors({ stack: true }), // Incluye el stack trace
               format.timestamp(),
@@ -61,13 +60,13 @@ export class WinstonLogger implements LoggerInterface {
         };
     }
 
-    if (contextOrError.error instanceof Error) {
-        return {
-            ...contextOrError,
-            errorMessage: contextOrError.error.message,
-            errorStack: contextOrError.error.stack,
-        };
-    }
+    if (contextOrError && 'error' in contextOrError && (contextOrError as any).error instanceof Error) { // <- Una comprobación más robusta
+      return {
+          ...contextOrError,
+          errorMessage: (contextOrError as any).error.message,
+          errorStack: (contextOrError as any).error.stack,
+      };
+  }
 
     return contextOrError;
   }
