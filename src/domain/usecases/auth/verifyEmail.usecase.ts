@@ -1,4 +1,4 @@
-import { AuthRepository } from "../../repositories/auth.repository.";
+import { AuthRepository } from "../../repositories/auth.repository";
 
 export interface IVerifyEmailUseCase {
     execute(token: string): Promise<boolean>;

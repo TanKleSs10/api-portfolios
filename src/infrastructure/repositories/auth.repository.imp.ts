@@ -1,7 +1,7 @@
 import { UserDataSource } from "../../domain/datasources/user.datasource";
 import { LoginUserDto } from "../../domain/dtos/auth/loginUser.dto";
 import { UserResponseDto } from "../../domain/dtos/user/userResponseDto";
-import { AuthRepository } from "../../domain/repositories/auth.repository.";
+import { AuthRepository } from "../../domain/repositories/auth.repository";
 import { BcryptAdapter } from "../adapters/bcript.adapter";
 import { JwtAdapter } from "../adapters/jwt.adapter";
 import { MailerAdapter } from "../adapters/nodemailer.adapter";

@@ -7,42 +7,42 @@ import { ValidatorMiddleware } from "../middlewares/validator.middleware";
 export class PostRoutes {
     static get routes(){
         const router = Router();
-
-        // Middlewares
-        router.use([AuthMiddleware.validateToken]);
         
         const postController = container.postController;
+
+        router.get("/", 
+            postController.getAllPost
+        );
+
+        router.get("/:id",
+            body("id").isMongoId().withMessage("Invalid post id"), 
+            postController.getPostById
+        );
 
         router.post("/", 
             body("title").isString().withMessage("Invalid title"),
             body("content").isString().withMessage("Invalid content"),
             body("tags").isArray().withMessage("Invalid tags").optional(),
-            [AuthMiddleware.authorizeRoles("admin", "editor"),
+            [AuthMiddleware.validateToken,
+            AuthMiddleware.authorizeRoles("admin", "editor"),
             ValidatorMiddleware.validateRequest],
             postController.createPost
         );
-        router.get("/", 
-            AuthMiddleware.authorizeRoles("admin", "editor"), 
-            postController.getAllPost
-        );
-            router.get("/:id",
-            body("id").isMongoId().withMessage("Invalid post id"), 
-            [AuthMiddleware.authorizeRoles("admin", "editor"),
-            ValidatorMiddleware.validateRequest], 
-            postController.getPostById
-        );
-            router.put("/:id",
+
+        router.put("/:id",
             body("id").isMongoId().withMessage("Invalid post id"),
             body("title").isString().withMessage("Invalid title"),
             body("content").isString().withMessage("Invalid content"),
             body("tags").isArray().withMessage("Invalid tags").optional(),
-            [AuthMiddleware.authorizeRoles("admin", "editor"),
+            [AuthMiddleware.validateToken,
+            AuthMiddleware.authorizeRoles("admin", "editor"),
             ValidatorMiddleware.validateRequest],
             postController.updatePost
         );
             router.delete("/:id", 
             body("id").isMongoId().withMessage("Invalid post id"),
-            [AuthMiddleware.authorizeRoles("admin"),
+            [AuthMiddleware.validateToken,
+            AuthMiddleware.authorizeRoles("admin", "editor"),
             ValidatorMiddleware.validateRequest], 
             postController.deletePost
         );

@@ -2,7 +2,7 @@ import { UserDataSource } from "../../domain/datasources/user.datasource";
 import { CreateUserDto } from "../../domain/dtos/user/createuser.dto";
 import { UpdateUserDto } from "../../domain/dtos/user/updateuser.dto";
 import { UserRepository } from "../../domain/repositories/user.repository";
-import { AuthRepository } from "../../domain/repositories/auth.repository.";
+import { AuthRepository } from "../../domain/repositories/auth.repository";
 import { UserResponseDto } from "../../domain/dtos/user/userResponseDto";
 
 export class UserRepositoryImpl implements UserRepository {

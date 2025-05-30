@@ -9,11 +9,11 @@ export class TagRoutes {
     static get routes() {
         const router = Router(); 
         
-        // Middlewares
-        router.use([AuthMiddleware.validateToken, AuthMiddleware.authorizeRoles("admin")]);
+
         
         const tagController = container.tagController;
 
+        // Routes Public
         router.get("/", tagController.getTags);
         router.get("/:id", 
             param("id").isMongoId().withMessage("Invalid tag id"),
@@ -25,18 +25,26 @@ export class TagRoutes {
             ValidatorMiddleware.validateRequest,
             tagController.getTagByName,
         );
+
+        // Routes Private
         router.post("/", 
             body("name").isString().withMessage("Invalid tag name"),
             ValidatorMiddleware.validateRequest,
+            AuthMiddleware.validateToken,
+            AuthMiddleware.authorizeRoles("admin", "editor"),
             tagController.createTag);
         router.put("/:id", 
             param("id").isMongoId().withMessage("Invalid tag id"),
             body("name").isString().withMessage("Invalid tag name"),
             ValidatorMiddleware.validateRequest,
+            AuthMiddleware.validateToken,
+            AuthMiddleware.authorizeRoles("admin", "editor"),
             tagController.updateTag);
         router.delete("/:id",
             param("id").isMongoId().withMessage("Invalid tag id"),
             ValidatorMiddleware.validateRequest,
+            AuthMiddleware.validateToken,
+            AuthMiddleware.authorizeRoles("admin", "editor"),
             tagController.deleteTag);
         
         return router;

@@ -30,14 +30,24 @@ export class ImageRoutes {
         param("id").isMongoId().withMessage("Invalid image id"),
         body("name").isString().withMessage("Invalid name"),
         body("alt").isString().withMessage("Invalid alt").optional(),
-        [ValidatorMiddleware.validateRequest],
+        [ValidatorMiddleware.validateRequest,
+        AuthMiddleware.validateToken, 
+        AuthMiddleware.authorizeRoles("admin", "editor")],
         imageController.updateImage
     );
      router.patch("/:id/main", 
         param("id").isMongoId().withMessage("Invalid image id"),
-        ValidatorMiddleware.validateRequest,
-        imageController.setMainImage);
-     router.delete("/:id", imageController.deleteImage);
+        [ValidatorMiddleware.validateRequest,
+        AuthMiddleware.validateToken, 
+        AuthMiddleware.authorizeRoles("admin", "editor")],
+        imageController.setMainImage
+    );
+     router.delete("/:id", 
+        param("id").isMongoId().withMessage("Invalid image id"),
+        [ValidatorMiddleware.validateRequest,
+        AuthMiddleware.validateToken, 
+        AuthMiddleware.authorizeRoles("admin", "editor")],
+        imageController.deleteImage);
 
      return router;
     }

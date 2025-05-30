@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { LoginUserDto } from "../../domain/dtos/auth/loginUser.dto";
-import { AuthRepository } from "../../domain/repositories/auth.repository.";
 import { LoginUseCase } from "../../domain/usecases/auth/login.usecase";
 import { VerifyEmailUseCase } from "../../domain/usecases/auth/verifyEmail.usecase";
 import { WinstonLogger } from "../../config/winstonConfig";
+import { AuthRepository } from "../../domain/repositories/auth.repository";
 
 export class AuthController {
     constructor(
