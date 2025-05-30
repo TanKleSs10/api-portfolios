@@ -1,5 +1,3 @@
-import { userInfo } from "os";
-
 export class CreatePostDto {
     constructor(
         public title: string,
