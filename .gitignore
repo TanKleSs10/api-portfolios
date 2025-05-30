@@ -5,12 +5,10 @@ build
 
 # Environment-specific files
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.test
 
 # Log files
+logs/
 *.log
 
 # Editor and IDE related files

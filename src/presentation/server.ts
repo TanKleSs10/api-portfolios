@@ -1,5 +1,7 @@
 import express, { Router } from "express";
-import { LoggerInterface } from "../infrastructure/logger/winstonLogger.adapter";
+
+import http from "http";
+import { LoggerInterface } from "../config/winstonConfig";
 
 interface Options {
     port: number;
@@ -12,6 +14,7 @@ export class Server {
     private readonly port: number;
     private readonly routes: Router;
     private readonly logger: LoggerInterface;
+    private server?: http.Server;
     
     constructor(
         options: Options
@@ -31,9 +34,21 @@ export class Server {
         this.app.use(this.routes);
 
         // Start server
-        this.app.listen(this.port, () => {
-            this.logger.info(`Server running on http://localhost:${this.port}`);
+        this.server = this.app.listen(this.port, () => {
+            this.logger.info(`Server running on http://localhost:${this.port}`, {}, "server");
         });
         
     }
+
+    getApp(): express.Express {
+        return this.app;
+      }
+    
+      /** Para cerrar el servidor en afterAll */
+      async stop() {
+        if (!this.server) return;
+        await new Promise<void>((resolve, reject) => {
+          this.server!.close(err => (err ? reject(err) : resolve()));
+        });
+      }
 }
