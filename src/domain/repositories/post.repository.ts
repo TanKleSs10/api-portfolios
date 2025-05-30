@@ -7,5 +7,5 @@ export abstract class PostRepository {
     abstract getPosts(): Promise<PostEntity[]>;
     abstract getPost(id: string): Promise<PostEntity>;
     abstract updatePost(updatePostDto: UpdatePostDto): Promise<PostEntity>; 
-    abstract deletePost(id: string): Promise<PostEntity>;
+    abstract deletePost(id: string,userId: string, userRole: "editor" | "admin"): Promise<PostEntity>;
 }

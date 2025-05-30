@@ -1,3 +1,5 @@
+import { UserEntity } from "./user.entity";
+
 export class PostEntity {
     constructor(
         public id: string,
@@ -6,7 +8,7 @@ export class PostEntity {
         public content: string,
         public images: string[] = [], // Contiene ids de las imagenes
         public tags: string[] = [], // Contiene ids de los tags
-        public user: string, // Contiene el id del usuario que creo el post
+        public user: UserEntity, // Contiene el id del usuario que creo el post
         public isPublic: boolean = false,
         public createdAt?: Date,
         public updatedAt?: Date,

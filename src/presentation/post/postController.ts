@@ -110,7 +110,8 @@ export class PostController {
 
     public deletePost = (req: Request, res: Response) => {
         const { id } = req.params;
-        new DeletePostUseCase(this.postRepository).execute(id).then(post => {
+        const user = req.user
+        new DeletePostUseCase(this.postRepository).execute(id, user.id, user.rol).then(post => {
             res.status(200).json({
                 success: true,
                 message: "Post eliminado correctamente",

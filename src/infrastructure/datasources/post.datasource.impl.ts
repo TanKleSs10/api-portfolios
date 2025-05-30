@@ -14,12 +14,12 @@ export class PostDataSourceImpl implements PostDataSource {
     }
     
     async getPosts(): Promise<PostEntity[]> {
-        const posts = await postModel.find().populate("tags", "name").populate("images", "name alt url isMain").populate("user", "name email");
+        const posts = await postModel.find().populate("tags", "name").populate("images", "name alt url isMain").populate("user");
         return posts.map(post => PostEntity.fromObject(post));
     }
     
     async getPost(id: string): Promise<PostEntity> {
-        const post = await postModel.findById(id).populate("tags", "name").populate("images", "name alt url isMain").populate("user", "name email");
+        const post = await postModel.findById(id).populate("tags", "name").populate("images", "name alt url isMain").populate("user");
         if (!post) {
             throw new Error("Post not found.");
         }

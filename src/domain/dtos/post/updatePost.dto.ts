@@ -5,7 +5,7 @@ export class UpdatePostDto {
         public slug: string,
         public content: string,
         public userId: string,
-        public user_role: "admin" | "user",
+        public user_role: "admin" | "editor",
         public tags?: string[],
         public isPublic?: boolean,
     ){}
